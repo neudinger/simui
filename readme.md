@@ -21,12 +21,55 @@ Source: https://astral.sh/uv/
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+### Run the simulation
+
+#### Install dependencies and create a virtual environment
+
 ```bash
 export UV_LINK_MODE=copy
 # This will automatically install the dependencies and copy them to the project in to the venv
 uv sync
 source .venv/bin/activate
+```
+
+#### Run the simulation with python interpreter
+
+```bash
 python simui.py
+```
+
+### Package the simulation to a single executable file
+
+It will compile the python code into a single executable file.
+
+This will create a single executable file that can be run on any computer don't need python installed.
+
+#### Install dependencies and create a virtual environment
+
+```bash
+export UV_LINK_MODE=copy
+
+# This will automatically install the dependencies and copy them to the project in to the venv
+
+uv sync
+source .venv/bin/activate
+```
+
+```bash
+export PATH=$PATH:$PWD/.venv/bin/
+
+imgui_bundle_asset_path=`python -c "import imgui_bundle, os; print(os.path.join(os.path.dirname(imgui_bundle.__file__), 'assets'))"`
+
+pyinstaller --onefile --noconsole \
+  --add-data "${imgui_bundle_asset_path}:imgui_bundle/assets" \
+  --name "simui" \
+  simui.py
+```
+
+#### Run the simulation with the single executable file
+
+```bash
+./dist/simui
 ```
 
 ## Pyiodide for web

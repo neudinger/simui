@@ -126,7 +126,10 @@ def gui_right_panel() -> None:
 def main() -> None:
     runner_params = hello_imgui.RunnerParams()
 
-    runner_params.app_window_params.window_title = "Split Layout Demo"
+    # runner_params.app_window_params.borderless = True
+    # runner_params.app_window_params.resizable = False
+
+    runner_params.app_window_params.window_title = "Simui camera_profile_viewer"
     runner_params.app_window_params.window_geometry.size = (1700, 1500)
 
     runner_params.imgui_window_params.default_imgui_window_type = (

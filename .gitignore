@@ -3,3 +3,5 @@ uv.lock
 build
 dist
 __pycache__
+*.spec
+*.ini
