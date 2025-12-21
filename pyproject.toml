@@ -2,12 +2,13 @@
 name = "camera_profile_viewer"
 version = "0.1.0"
 description = "Simui is a simple application to visualize the profiles of the camera frames with ImGui and ImPlot for desktop and web and mobile platforms. The python code is based on the ImGui Bundle. The goal is to show how to use ImPlot and ImGui in a python project, and it portability in web view with pyodide."
-readme = "README.md"
+readme = "readme.md"
 requires-python = ">=3.13"
 dependencies = [
     "imgui-bundle[full]>=1.92.5",
     "numpy>=2.4.0",
     "pyinstaller>=6.17.0",
+    "pyoxidizer>=0.24.0",
     "staticx>=0.14.1",
 ]
 

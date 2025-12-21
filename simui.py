@@ -123,7 +123,7 @@ def gui_right_panel() -> None:
         implot.end_plot()
 
 
-def main() -> None:
+def simui() -> None:
     runner_params = hello_imgui.RunnerParams()
 
     # runner_params.app_window_params.borderless = True
@@ -169,4 +169,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    simui()

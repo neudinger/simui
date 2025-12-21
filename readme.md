@@ -1,7 +1,10 @@
-
 # Build and install dependencies
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
+## Description
+
+Simui is a simple application to visualize the profiles of the camera frames with ImGui and ImPlot for desktop and web and mobile platforms. The python code is based on the ImGui Bundle. The goal is to show how to use ImPlot and ImGui in a python project, and it portability in web view with pyodide.
 
 ## Visualise now
 
@@ -59,8 +62,12 @@ source .venv/bin/activate
 export PATH=$PATH:$PWD/.venv/bin/
 
 imgui_bundle_asset_path=`python -c "import imgui_bundle, os; print(os.path.join(os.path.dirname(imgui_bundle.__file__), 'assets'))"`
+PYTHONOPTIMIZE=3
 
-pyinstaller --onefile --noconsole \
+pyinstaller \
+  --onefile \
+  --noconsole \
+  --windowed \
   --add-data "${imgui_bundle_asset_path}:imgui_bundle/assets" \
   --name "simui" \
   simui.py
@@ -72,7 +79,7 @@ pyinstaller --onefile --noconsole \
 ./dist/simui
 ```
 
-#### make a standalone executable statically linked to the system libraries
+#### Make a standalone executable statically linked to the system libraries
 
 Now we have a single executable file that can be run on any computer.
 
@@ -91,14 +98,14 @@ ldd ./dist/simui
 
 We can use the staticx tool to make a standalone executable that is statically linked to the system libraries.
 
-- [python-staticx](https://github.com/indygreg/python-staticx)
+- [python-staticx](https://pypi.org/project/staticx/)
 
 ```bash
 sudo apt install patchelf
 ```
 
 ```bash
-staticx ./dist/simui ./distsimui_static
+staticx ./dist/simui ./dist/simui_static
 ```
 
 Now we have a single executable file that is statically linked to the system libraries.
@@ -111,6 +118,40 @@ ldd ./dist/simui_static
 ```bash
 ./simui_static
 ```
+
+### Docker
+
+```bash
+xhost +local:docker
+
+docker build . -t simui:latest
+```
+
+X11 forwarding
+
+```bash
+docker run -it --rm \
+    --net=host \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v $HOME/.Xauthority:/root/.Xauthority \
+    simui:latest
+```
+
+Wayland forwarding
+
+```bash
+docker run -it --rm \
+    -e XDG_RUNTIME_DIR=/tmp \
+    -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+    -e DISPLAY=$DISPLAY \
+    -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY \
+    -e QT_QPA_PLATFORM=wayland \
+    -e GDK_BACKEND=wayland \
+    simui:latest
+```
+
+Adapt with `--device /dev/...`
 
 ## Pyiodide for web
 
@@ -140,13 +181,19 @@ Imgui_bundle, ImPlot, ImGui_Md, Hello_imgui, Immvision, Immapp, numpy, and ImGui
 
 ### ImGui
 
-Use [Fiatlight](pthom.github.io/fiatlight_doc/flgt/intro.html) for faster UI developement.
+Use [Fiatlight](https://pthom.github.io/fiatlight_doc/flgt/intro.html) for faster UI developement.
 
 ### Packages
 
-[PyInstaller](https://pyinstaller.org/en/stable/) and/or [Nuitka](https://nuitka.net/) or [PyOxidizer](https://github.com/indygreg/PyOxidizer) can be used to compile the python code into a single executable file.
+[PyInstaller](https://pyinstaller.org/en/stable/) or [PyOxidizer](https://github.com/indygreg/PyOxidizer) can be used to compile the python code into a single executable file.
 
 Shaders (GLSL) can be used to use gpu acceleration, also interoperability with vulkan, metal, dx12, OpenCV, and CUDA is Possible.
+
+## Possible Performance Improvements
+
+[cythonizer](https://github.com/TechLearnersInc/cythonizer) and [pyoxidizer](https://github.com/indygreg/PyOxidizer) can be used to compile the python code into a single executable file.
+
+Write the code in cython and compile it to c code.
 
 ### ImGui
 
