@@ -8,6 +8,7 @@ dependencies = [
     "imgui-bundle[full]>=1.92.5",
     "numpy>=2.4.0",
     "pyinstaller>=6.17.0",
+    "staticx>=0.14.1",
 ]
 
 [dependency-groups]

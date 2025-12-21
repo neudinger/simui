@@ -72,6 +72,46 @@ pyinstaller --onefile --noconsole \
 ./dist/simui
 ```
 
+#### make a standalone executable statically linked to the system libraries
+
+Now we have a single executable file that can be run on any computer.
+
+But it is not statically linked to the system libraries.
+
+```bash
+ldd ./dist/simui
+        linux-vdso.so.1 (0x00007907122e2000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007907122b6000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x0000790712298000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x0000790712293000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000790712000000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007907122e4000)
+```
+
+
+We can use the staticx tool to make a standalone executable that is statically linked to the system libraries.
+
+- [python-staticx](https://github.com/indygreg/python-staticx)
+
+```bash
+sudo apt install patchelf
+```
+
+```bash
+staticx ./dist/simui ./distsimui_static
+```
+
+Now we have a single executable file that is statically linked to the system libraries.
+
+```bash
+ldd ./dist/simui_static
+        not a dynamic executable
+```
+
+```bash
+./simui_static
+```
+
 ## Pyiodide for web
 
 source: https://pyodide.com/
@@ -93,6 +133,8 @@ Imgui_bundle, ImPlot, ImGui_Md, Hello_imgui, Immvision, Immapp, numpy, and ImGui
 - [imgui_md](https://github.com/pthom/imgui_md)
 - [hello_imgui](https://github.com/pthom/hello_imgui)
 - [immvision](https://github.com/pthom/immvision)
+- [python-staticx](https://github.com/indygreg/python-staticx)
+- [pyinstaller](https://pyinstaller.org/)
 
 ## Perspectives
 
