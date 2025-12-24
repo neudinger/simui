@@ -119,6 +119,55 @@ ldd ./dist/simui_static
 ./simui_static
 ```
 
+
+#### Nuitka
+
+pyinstaller + staticx create in fact an executable python archive, it is not a real binary executable like a compiled c or c++ program.
+
+To achieve a real binary executable, we need to compile the python with nuitka.
+
+Nuitka is a Python compiler that can compile Python code into C code.
+
+```bash
+export UV_LINK_MODE=copy
+
+# This will automatically install the dependencies and copy them to the project in to the venv
+sudo apt install build-essential ccache
+uv sync
+source .venv/bin/activate
+```
+
+```bash
+export PATH=$PATH:$PWD/.venv/bin/
+export PY_VER=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+export PYTHONPATH=$PWD/.venv/lib/python$PY_VER/site-packages/
+
+export imgui_bundle_asset_path=`python -c "import imgui_bundle, os; print(os.path.join(os.path.dirname(imgui_bundle.__file__), 'assets'))"`
+export PYTHONOPTIMIZE=3
+
+mkdir --parents dist
+
+# With musl in alpine container build
+# --static-libpython=yes \
+# Only if you need a final single executable file but will delay the startup time.
+# --onefile \
+# Require to have all the dependencies installed in static mode
+# --lto=yes \
+python -m nuitka \
+    --standalone \
+    --onefile \
+    --include-package=imgui_bundle \
+    --include-package-data=imgui_bundle \
+    --include-data-dir=${imgui_bundle_asset_path}=imgui_bundle/assets \
+    --noinclude-pytest-mode=nofollow \
+    --output-dir=dist \
+    --enable-plugin=no-qt \
+    -o simui.bin \
+    simui.py
+```
+
+**nuitka** command take time to compile because it is compiling the python code into c code and then compiling the c code into a binary executable.
+
 ### Docker
 
 ```bash

@@ -1,7 +1,9 @@
-uv.lock
-.venv
-build
-dist
-__pycache__
+*.lock
 *.spec
 *.ini
+__pycache__/
+.venv/
+build/
+dist/
+.devcontainer/
+build_artifacts/

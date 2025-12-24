@@ -4,7 +4,14 @@ import time
 import numpy as np
 from dataclasses import dataclass
 from typing import Optional
-from imgui_bundle import imgui, implot, imgui_md, hello_imgui, immvision, immapp
+from imgui_bundle import (
+    imgui,
+    implot,
+    immapp,
+    hello_imgui,
+    immvision,
+    imgui_md,
+)
 from typing import Any
 
 if os.getenv("XDG_SESSION_TYPE") == "wayland" and not os.getenv("PYOPENGL_PLATFORM"):
@@ -23,7 +30,8 @@ app_state = AppState()
 def readCurrentFrame(
     meshgrid_size_x: int = 200, meshgrid_size_y: int = 100
 ) -> np.ndarray[Any, np.dtype[np.float64]]:
-    index = int(time.time() * 10) % 100
+    # with cython.boundscheck(False), cython.wraparound(False), cython.cdivision(True):
+    index: int = int(time.time() * 10) % 100
     x, y = np.meshgrid(list(range(meshgrid_size_x)), list(range(meshgrid_size_y)))
     out = (
         np.exp(-(x**2 + (y - 50) ** 2) / 400)
